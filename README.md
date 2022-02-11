@@ -16,6 +16,9 @@ The rules file is a yaml map, the keys being only names.
        
        - name_of_rule: whatever
          # match is a node selector, starting at your document root ($)
+
+         # For some hints on Jsonpath syntax, you can have a look for example at https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html
+
          #  Here the selector targets all items in the 'containers' array
          match: "$..spec.containers[*]" 
                 set:
@@ -52,6 +55,9 @@ The rules file is a yaml map, the keys being only names.
          
          #  Here the selector targets only some some 'containers' in my array
          # And for these containers, it will remove port 8080 from their ports list
+       
+         # For some hints on Jsonpath syntax, you can have a look for example at https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html
+
          match: "$..spec.containers[?(@.my_container_type_field==needs_ports_trimming)]" 
          deleteChildrenThatMatch: "?(@.ports[?(@.target_port==8080)])"
 
