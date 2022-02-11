@@ -9,8 +9,10 @@ transform a yaml source using simple rules
        set values.
        
 - 'deleteChildrenThatMatch' rule:  removes array children or keys from nodes that match a first-level matching JsonPath expression.
-       When applied to an Array, the children to remove are those matching a second-level matching JsonPath (syntax following arrays conditional within the '[]' construct)
-       When applied to a Map Object, this allows to remove a single key by its name. In this case, wildcard or conditions based on the object content are not supported
+       
+       When applied to an Array, the children to remove are those matching a second-level matching JsonPath (syntax following arrays conditional within the '[]' JsonPath construct)
+       
+       When applied to a Map Object, this also allows to remove a single key by its name. But in this case, wildcard or conditions based on the object content are not supported (only a single fixed key is removed)
 
 
 As an example, see "rules_example.yaml", and "myfile_to_transform.yaml"
