@@ -83,7 +83,7 @@ func readInput() yaml.Node {
 
 type SetSpec struct {
 	Subpath string
-	Values  map[string]string
+	Values  map[string]yaml.Node
 }
 
 type RuleSpec struct {
@@ -140,6 +140,16 @@ func buildStringNodes(key string, value string) []*yaml.Node {
 	return []*yaml.Node{keyNode, valueNode}
 }
 
+func buildKeyNode(key string) *yaml.Node {
+	keyNode := &yaml.Node{
+		Kind:  yaml.ScalarNode,
+		Tag:   "!!str",
+		Value: key,
+	}
+
+	return keyNode
+}
+
 func applySet(spec SetSpec, node *yaml.Node) {
 
 	p, err := yamlpath.NewPath(spec.Subpath)
@@ -163,13 +173,15 @@ func applySet(spec SetSpec, node *yaml.Node) {
 			fieldMatches, err := fieldPath.Find(matchingNode)
 
 			if len(fieldMatches) != 0 {
-				fieldMatches[0].Value = fieldValue
+				r := &fieldMatches[0]
+				(*r).Kind = fieldValue.Kind
+				(*r).Tag = fieldValue.Tag
+				(*r).Value = fieldValue.Value
+				(*r).Content = fieldValue.Content
+				(*r).Column = fieldValue.Column
+				log.Printf("hello\n")
 			} else {
-				matchingNode.Content = append(matchingNode.Content, buildStringNodes(fieldName, fieldValue)...)
-
-			}
-			for _, fieldNode := range fieldMatches {
-				fieldNode.Value = fieldValue
+				matchingNode.Content = append(matchingNode.Content, buildKeyNode(fieldName), &fieldValue)
 			}
 		}
 	}

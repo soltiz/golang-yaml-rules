@@ -1,5 +1,9 @@
 ---
-override_existing_image_attribute:
+
+# Jsonpath syntax : https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html
+
+
+override_existing_image_attribute_if_it_exists:
   match: "$..spec.containers[?(@.image)]"
   set:
   - subpath: "$"
@@ -19,3 +23,13 @@ provide_default_value:
   - subpath: "$"
     values:
       isRoot: true
+
+assign_section:
+  match: "$..spec.containers[*]"
+  set:
+  - subpath: "$"
+    values:
+      credentials:
+        username: cedric
+        password: secret
+

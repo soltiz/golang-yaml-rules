@@ -14,9 +14,20 @@ spec:
         imagePullPolicy: never
         ports:
         - containerPort: 80
+
       - name: container_with_image
         image: nginy
         isRoot: false
         ports:
         - containerPort: 81
+        credentials: 
+          scheme: none
+
+      - name: other_initial_types
+        imagePullPolicy: false
+        isRoot: 13
+        ports:
+        - containerPort: 80
+        credentials: 18
+
 
