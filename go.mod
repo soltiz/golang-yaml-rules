@@ -1,4 +1,4 @@
-module io.github.soltiz/cvfyaml
+module io.github.soltiz/golang-yaml-rules/yaml-transform
 
 go 1.13
 

@@ -7,10 +7,11 @@ import (
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"log"
+	"os"
 )
 
-func readInput() yaml.Node {
-	yamlFile, err := ioutil.ReadFile("mycrd.yaml")
+func readInput(documentFileName string) yaml.Node {
+	yamlFile, err := ioutil.ReadFile(documentFileName)
 
 	if err != nil {
 		log.Fatal("Unable to read input file", err)
@@ -37,8 +38,8 @@ type RuleSpec struct {
 	DeleteChildrenThatMatch string `yaml:"deleteChildrenThatMatch"`
 }
 
-func readRules() map[string]RuleSpec {
-	yamlFile, err := ioutil.ReadFile("rules.yaml")
+func readRules(rulesFileName string) map[string]RuleSpec {
+	yamlFile, err := ioutil.ReadFile(rulesFileName)
 
 	if err != nil {
 		log.Fatal(err)
@@ -218,8 +219,16 @@ func outputResult(doc yaml.Node) {
 }
 
 func main() {
-	rules := readRules()
-	document := readInput()
+
+	if len(os.Args) != 3 {
+		log.Fatalf("Usage: %v <path to rules yaml file> <path to document yaml file", os.Args[0])
+	}
+
+	ruleFile := os.Args[1]
+	documentFileName := os.Args[2]
+
+	rules := readRules(ruleFile)
+	document := readInput(documentFileName)
 	for ruleName, ruleSpec := range rules {
 		log.Printf("Applying rule '%v'...\n", ruleName)
 		applyRule(ruleSpec, document)

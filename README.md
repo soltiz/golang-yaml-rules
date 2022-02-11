@@ -1,4 +1,4 @@
-# golang-yaml-rules
+# golang-yaml-rules/yaml-transform
 Library/tool to change a yaml given a rules file
 
 Using jsonpath ( https://github.com/vmware-labs/yaml-jsonpath ), this tool shows how to 
@@ -15,6 +15,14 @@ transform a yaml source using simple rules
 
 As an example, see "rules.yaml", and "myfile_to_transform.yaml"
 
-At the moment, the main is hard-coded to use both files, so no argument is needed.
 
+Usage:
+
+       yaml-transform <rules yaml file path> <document yaml file path>
+
+try out:
+       
+       ./yaml-transform  rules_example.yaml myfile_to_transform.yaml
+
+This will output transformed yaml file to stdout
 

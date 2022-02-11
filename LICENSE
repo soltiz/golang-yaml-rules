@@ -1,4 +1,4 @@
-cvfyaml/golang-yaml-rules
+io/github/soltiz/golang-yaml-rules/yaml-transform
 Copyright (c) 2022 Cedric VAN FRACHEM All rights reserved.				
 
 The Apache 2.0 license (the "License") set forth below applies to all parts of the yaml-jsonpath project. You may not use this file except in compliance with the License.
