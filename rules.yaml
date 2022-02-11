@@ -1,0 +1,13 @@
+---
+override_existing_image_attribute:
+  match: $..spec.containers[*].image
+  set:
+  - subpath: $
+    value: here/is/my.img
+
+add_or_update_policy_attribute:
+  match: $..spec.containers[*]
+  set:
+  - subpath: $
+    values:
+      imagePullPolicy: alwaysPull
