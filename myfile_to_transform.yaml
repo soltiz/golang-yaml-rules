@@ -19,8 +19,7 @@ spec:
       - name: container_with_image
         image: nginx
         isRoot: false
-        may_be_unwanted: 
-          unwanted: false
+        unwanted_key: false
         ports:
         - containerPort: 81
         credentials: 
@@ -29,8 +28,7 @@ spec:
       - name: other_initial_types
         imagePullPolicy: false
         isRoot: 13
-        may_be_unwanted: 
-          unwanted: true
+        unwanted_key: true
         ports:
         - containerPort: 80
         credentials: 18

@@ -2,7 +2,10 @@
 
 # Jsonpath syntax : https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html
 
+# In this file, the first key is just a name, and has no specific meaning
 
+
+# Example of a rule that change all items in an array, applying a value directly into each object
 
 add_or_update_policy_attribute:
   match: "$..spec.containers[*]"
@@ -11,12 +14,21 @@ add_or_update_policy_attribute:
     values:
       imagePullPolicy: alwaysPull
 
+# Example of a conditional rule: here, we ensure absence of a key, which enables to provide a
+# default value if the key was not already specified.
+
 provide_default_value:
   match: "$..spec.containers[?(!@.isRoot)]"
   set:
   - subpath: "$"
     values:
       isRoot: true
+
+# Example of providing a whole section (here, 'credentials') that will 
+# TOTALLY override preexisting section with same key
+
+# if you want to set specfic sub-attributes without removing sibling attributes, use
+#  the 'subpath' setting to target more deeper into the object (see my_additional_field example)
 
 assign_section:
   match: "$..spec.containers[*]"
@@ -27,18 +39,28 @@ assign_section:
         username: cedric
         password: secret
 
+
+
 override_existing_image_attribute_but_only_if_it_exists:
   match: "$..spec.containers[?(@.image)]"
   set:
   - subpath: "$"
     values:
       image: here/is/my.img
+  - subpath: "$.ports[*]"
+    values:
+      my_additional_field: did_not_destroyed_the_port_number
 
+
+# This rule shows how to select some array items to remove, based on a condition (here the value of a field)
 
 delete_one_container_from_array:
   match: "$..spec.containers"
   deleteChildrenThatMatch: "?(@.to_remove==true)"
 
+# This rule shows how to remove a specific *key* from objects
+# it does NOT support wildcards or condition based on sub-attributes of object
+
 delete_unwanted_key_from_map:
   match: "$..spec.containers[*]"
-  deleteChildrenThatMatch: "$.unwanted"
+  deleteChildrenThatMatch: "$.unwanted_key"
