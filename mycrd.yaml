@@ -6,13 +6,17 @@ metadata:
 spec:
   template:
     spec:
+      lkj: |
+          alpha
+          beta
       containers:
-      - name: nginx_without_image
+      - name: container_without_image
         imagePullPolicy: never
         ports:
         - containerPort: 80
-      - name: nginy
+      - name: container_with_image
         image: nginy
+        isRoot: false
         ports:
         - containerPort: 81
 
