@@ -6,7 +6,8 @@ metadata:
 spec:
   template:
     spec:
-      lkj: |
+      # Comment that should be kept
+      multiline_field: |
           alpha
           beta
       containers:
@@ -16,7 +17,7 @@ spec:
         - containerPort: 80
 
       - name: container_with_image
-        image: nginy
+        image: nginx
         isRoot: false
         ports:
         - containerPort: 81
@@ -30,4 +31,8 @@ spec:
         - containerPort: 80
         credentials: 18
 
-
+      - name: container_to_remove
+        to_remove: true
+        imagePullPolicy: always
+        ports:
+        - containerPort: 80

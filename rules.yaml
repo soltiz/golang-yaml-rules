@@ -33,3 +33,7 @@ assign_section:
         username: cedric
         password: secret
 
+
+delete_one_container:
+  match: "$..spec.containers"
+  deleteChildrenThatMatch: "?(@.to_remove==true)"
