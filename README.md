@@ -13,7 +13,7 @@ transform a yaml source using simple rules
        When applied to a Map Object, this allows to remove a single key by its name. In this case, wildcard or conditions based on the object content are not supported
 
 
-As an example, see "rules.yaml", and "myfile_to_transform.yaml"
+As an example, see "rules_example.yaml", and "myfile_to_transform.yaml"
 
 
 Usage:
