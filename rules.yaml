@@ -3,12 +3,6 @@
 # Jsonpath syntax : https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html
 
 
-override_existing_image_attribute_if_it_exists:
-  match: "$..spec.containers[?(@.image)]"
-  set:
-  - subpath: "$"
-    values:
-      image: here/is/my.img
 
 add_or_update_policy_attribute:
   match: "$..spec.containers[*]"
@@ -33,7 +27,18 @@ assign_section:
         username: cedric
         password: secret
 
+override_existing_image_attribute_but_only_if_it_exists:
+  match: "$..spec.containers[?(@.image)]"
+  set:
+  - subpath: "$"
+    values:
+      image: here/is/my.img
 
-delete_one_container:
+
+delete_one_container_from_array:
   match: "$..spec.containers"
   deleteChildrenThatMatch: "?(@.to_remove==true)"
+
+delete_unwanted_key_from_map:
+  match: "$..spec.containers[*]"
+  deleteChildrenThatMatch: "$.unwanted"

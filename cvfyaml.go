@@ -75,8 +75,9 @@ func applyRule(ruleSpec RuleSpec, document yaml.Node) {
 	}
 }
 
-func deleteChildrenThatMatch(match string, parentNode *yaml.Node) {
-	childrenMatchString := "$[" + match + "]"
+func removeArrayChildren(matchSubpath string, parentNode *yaml.Node) {
+
+	childrenMatchString := "$[" + matchSubpath + "]"
 	p, err := yamlpath.NewPath(childrenMatchString)
 	if err != nil {
 		log.Fatalf("cannot create children match lookup: %v", err)
@@ -95,6 +96,42 @@ func deleteChildrenThatMatch(match string, parentNode *yaml.Node) {
 	}
 
 	parentNode.Content = nodesToKeep
+}
+
+func removeMapChildren(matchSubpath string, parentNode *yaml.Node) {
+
+	p, err := yamlpath.NewPath(matchSubpath)
+	if err != nil {
+		log.Fatalf("cannot create children match lookup: %v", err)
+	}
+
+	nodesToRemove, err := p.Find(parentNode)
+	if err != nil {
+		log.Fatalf("unexpected error: %v", err)
+	}
+	nodesToKeep := []*yaml.Node{}
+
+	// In mapping nodes, Content is an array with pairs of key and values nodes (2 nodes for each child therefore)
+	for i := 0; i < len(parentNode.Content); i += 2 {
+
+		if !nodesInList(parentNode.Content[i+1], nodesToRemove) {
+			nodesToKeep = append(nodesToKeep, parentNode.Content[i], parentNode.Content[i+1])
+		}
+	}
+
+	parentNode.Content = nodesToKeep
+}
+
+func deleteChildrenThatMatch(matchSubpath string, parentNode *yaml.Node) {
+	switch parentNode.Kind {
+	case yaml.SequenceNode:
+		removeArrayChildren(matchSubpath, parentNode)
+	case yaml.MappingNode:
+		removeMapChildren(matchSubpath, parentNode)
+	default:
+		log.Fatalf("Not knowing how to remove a child from yaml node of type '%v'(tag=%v)", parentNode.Kind, parentNode.Tag)
+	}
+
 }
 
 func nodesInList(node *yaml.Node, nodesList []*yaml.Node) bool {
